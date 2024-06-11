@@ -1,6 +1,12 @@
 package exercice03.exercice03.entity;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String lastname;
     private String firstname;
     private int age;
@@ -11,6 +17,10 @@ public class Person {
         this.age = age;
     }
     public Person() {}
+
+    public int getId() {
+        return id;
+    }
     public String getLastname() {
         return lastname;
     }

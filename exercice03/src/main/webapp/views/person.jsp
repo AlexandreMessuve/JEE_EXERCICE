@@ -25,9 +25,26 @@
                     <th>NOM</th>
                     <th>Prénom</th>
                     <th>Age</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
+            <tr>
+                <form action="${pageContext.request.contextPath}/person" method="post">
+                    <td>
+                        <input class="form-control" id="lastname" name="lastname" type="text" placeholder="NOM">
+                    </td>
+                    <td>
+                        <input  class="form-control"  name="firstname" id="firstname" type="text" placeholder="Prénom">
+                    </td>
+                    <td>
+                        <input class="form-control" type="number" name="age" id="age">
+                    </td>
+                    <td>
+                        <button>Add</button>
+                    </td>
+                </form>
+            </tr>
             <% for (Person p : persons) { %>
             <tr>
                 <td><%=p.getLastname().toUpperCase()%></td>
