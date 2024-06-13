@@ -17,9 +17,15 @@
 <body>
 <main>
     <div class="container bg-dark text-light">
-        <h1>Liste des chiens</h1>
+        <div class="d-flex justify-content-between my-2">
+            <h1>Liste des chiens</h1>
+            <div class="align-content-center">
+                <a href="${pageContext.request.contextPath}/dog/addDog" class="btn btn-outline-primary">Ajouter un chien</a>
+            </div>
+        </div>
+
         <hr  />
-        <table class="table table-striped table-dark">
+        <table class="table table-dark table-bordered table-striped  my-3 text-center">
             <thead>
                 <tr>
                     <th>#</th>
@@ -29,27 +35,35 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="align-baseline">
                 <% if (!dogs.isEmpty()) {
+                    int i = 1;
                    for (Dog dog : dogs) {
                 %>
                     <tr>
-                        <th><%=dog.getId()%></th>
+                        <th><%=i++%></th>
                         <td><%=dog.getName()%></td>
                         <td><%=dog.getSpecie()%></td>
                         <td><%=dog.getBirthday().format(DateTimeFormatter.ISO_DATE)%></td>
-                        <td>
-                            <a class="btn btn-outline-info" href="${pageContext.request.contextPath}/dog/<%=dog.getId()%>">Detail</a>
+                        <td class="d-flex justify-content-center">
+                            <div class="mx-1">
+                                <a class="btn btn-outline-info" href="${pageContext.request.contextPath}/dog/<%=dog.getId()%>">Detail</a>
+                            </div>
+                            <form method="post" action="${pageContext.request.contextPath}/dog/delete">
+                                <input hidden="hidden" type="text" value="<%=dog.getId()%>" name="id" >
+                                <input hidden="hidden" type="text" value="delete" name="_method">
+                                <button class="btn btn-outline-danger">Supprimer</button>
+                            </form>
                         </td>
                     </tr>
                 <%}}else{ %>
                     <tr>
-                        <td colspan="5">Aucune donnée</td>
+                        <th colspan="5">Aucune donnée</th>
                     </tr>
                 <% }%>
             </tbody>
         </table>
-        <a href="${pageContext.request.contextPath}/dog/addDog" class="btn btn-outline-primary">Ajouter un chien</a>
+        <hr />
     </div>
 </main>
 </body>

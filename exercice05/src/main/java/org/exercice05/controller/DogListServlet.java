@@ -7,21 +7,19 @@ import org.exercice05.entity.Dog;
 import org.exercice05.repository.DogRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "doglist", value = "/dog/doglist")
 public class DogListServlet extends HttpServlet {
-    private List<Dog> dogs;
     private final DogRepository dogRepository = new DogRepository();
     @Override
     public void init() throws ServletException {
-        dogs = dogRepository.getAll();
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String pathInfo = (req.getPathInfo() != null && !req.getPathInfo().isEmpty()) ? req.getPathInfo() : "" ;
-        System.out.println(pathInfo);
+        List<Dog> dogs = dogRepository.getAll();
         req.setAttribute("dogs", dogs);
         getServletContext().getRequestDispatcher("/page/dogList.jsp").forward(req, resp);
     }

@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Accueil</title>
-    <%@include file="WEB-INF/bootstrap.html"%>
+    <%@include file="/WEB-INF/bootstrap.html"%>
 </head>
 <body>
 <header>
@@ -13,9 +13,9 @@
 <hr />
 <main>
     <div class="container d-flex justify-content-center">
-        <a href="doglist">
+        <a href="${pageContext.request.contextPath}/dog/doglist" class="link-dark link-opacity-50-hover link-underline-opacity-0">
+            <p class="text-center fs-4">Liste des chiens</p>
             <img src="https://i.pinimg.com/736x/fc/4a/3b/fc4a3b241f4edb9a7aab9fe8f73bb485.jpg" alt="chien"/>
-            <p class="text-center">Liste des chiens</p>
         </a>
     </div>
 
