@@ -12,11 +12,11 @@ public class ProductService extends ServiceHibernate{
         super();
     }
 
-    public boolean createProduct(String bread, String ref, double price, int stock) {
+    public boolean createProduct(String bread, String ref,LocalDateTime purchaseDate, double price, int stock) {
         boolean result = false;
         session = sessionFactory.openSession();
         session.beginTransaction();
-        Product product = new Product(bread, ref, price, stock);
+        Product product = new Product(bread, ref,purchaseDate, price, stock);
         productRepository = new ProductRepository(session);
         try {
             productRepository.create(product);
@@ -35,17 +35,18 @@ public class ProductService extends ServiceHibernate{
 
     }
 
-    public boolean updateProduct(int id, String brand, String ref, double price, int stock) {
+    public boolean updateProduct(int id, String brand, String ref,LocalDateTime purchaseDate, double price, int stock) {
         boolean result = false;
         Product product;
         session = sessionFactory.openSession();
         session.beginTransaction();
         productRepository = new ProductRepository(session);
-        if (brand != null && ref != null && price != 0 && stock != 0) {
+        if (brand != null && ref != null && purchaseDate != null && price >= 0 && stock >= 0) {
             product = productRepository.findById(id);
             if (product != null) {
                 product.setBrand(brand);
                 product.setReference(ref);
+                product.setPurchaseDate(purchaseDate);
                 product.setPrice(price);
                 product.setStock(stock);
                 product.setUpdatedAt(LocalDateTime.now());
@@ -96,7 +97,7 @@ public class ProductService extends ServiceHibernate{
         return productRepository.findById(id);
     }
 
-    public List<Product> getUsers() {
+    public List<Product> getProducts() {
         session = sessionFactory.openSession();
         productRepository = new ProductRepository(session);
         return productRepository.getAll();

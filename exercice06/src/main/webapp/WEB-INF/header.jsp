@@ -20,7 +20,10 @@
                     </li>
                     <%}else{%>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Products</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/products/list">ProductList</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/products/addForm">Add Product</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/user/logout" >Logout</a>

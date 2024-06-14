@@ -29,10 +29,10 @@ public class Product {
 
 
     public Product() {}
-    public Product(String brand, String reference, Double price, int stock) {
+    public Product(String brand, String reference,LocalDateTime purchaseDate, Double price, int stock) {
         this.brand = brand;
         this.reference = reference;
-        this.purchaseDate = LocalDateTime.now();
+        this.purchaseDate = purchaseDate;
         this.price = price;
         this.stock = stock;
         createdAt = LocalDateTime.now();

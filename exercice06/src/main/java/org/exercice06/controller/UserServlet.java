@@ -65,7 +65,7 @@ public class UserServlet extends HttpServlet {
         if (user != null && user.getPassword().equals(password)) {
             req.getSession().setAttribute("user", user);
             req.getSession().setAttribute("isLoggedIn", true);
-            resp.sendRedirect(getServletContext().getContextPath());
+            resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
         }else {
            loginForm(req, resp);
         }
@@ -74,7 +74,7 @@ public class UserServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
         if (userService.createUser(email, password)){
-            loginForm(req, resp);
+            resp.sendRedirect(getServletContext().getContextPath()+"/user/loginForm");
         }else {
             registerForm(req, resp);
         }

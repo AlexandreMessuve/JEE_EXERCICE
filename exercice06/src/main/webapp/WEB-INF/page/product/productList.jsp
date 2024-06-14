@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="org.exercice06.entity.Product" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <jsp:useBean id="products" type="java.util.List<org.exercice06.entity.Product>" scope="request" />
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -17,9 +18,9 @@
 <%@include file="/WEB-INF/header.jsp"%>
 <div class="container bg-dark text-light">
     <div class="d-flex justify-content-between my-2">
-        <h1>Liste des chiens</h1>
+        <h1>Product list</h1>
         <div class="align-content-center">
-            <a href="${pageContext.request.contextPath}/dog/addDog" class="btn btn-outline-primary">Ajouter un chien</a>
+            <a href="${pageContext.request.contextPath}/products/addForm" class="btn btn-outline-primary">Ajouter un produit</a>
         </div>
     </div>
 
@@ -28,9 +29,9 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>Nom</th>
-            <th>Race</th>
-            <th>Date de naissance</th>
+            <th>Brand</th>
+            <th>Reference</th>
+            <th>Price</th>
             <th>Action</th>
         </tr>
         </thead>
@@ -46,10 +47,13 @@
             <td><%=product.getPrice()%>$</td>
             <td class="d-flex justify-content-center">
                 <div class="mx-1">
-                    <a class="btn btn-outline-info" href="${pageContext.request.contextPath}/products/detail?id=<%=dog.getId()%>">Detail</a>
+                    <a class="btn btn-outline-info" href="${pageContext.request.contextPath}/products/detail?id=<%=product.getId()%>">Detail</a>
                 </div>
-                <div>
-                    <a class="btn btn-outline-danger" href="${pageContext.request.contextPath}/products/delete?id=<%=product.getId()%>"></a>
+                <div class="mx-1">
+                    <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/products/updateForm?id=<%=product.getId()%>">Update</a>
+                </div>
+                <div class="mx-1">
+                    <a onclick="return confirm('Are you sure ? ')" class="btn btn-outline-danger" href="${pageContext.request.contextPath}/products/delete?id=<%=product.getId()%>">Delete</a>
                 </div>
             </td>
         </tr>
