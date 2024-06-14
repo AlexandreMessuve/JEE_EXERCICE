@@ -136,13 +136,35 @@ public class ProductServlet extends HttpServlet {
         showForm(req, resp);
     }
     protected void updateProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
-        String brand = req.getParameter("brand");
-        String ref = req.getParameter("ref");
-        LocalDateTime purchaseDate = LocalDateTime.parse(req.getParameter("purchaseDate"));
-        double price = Double.parseDouble(req.getParameter("price"));
-        int stock = Integer.parseInt(req.getParameter("stock"));
-        if(productService.updateProduct(id, brand, ref, purchaseDate, price, stock)){
+        String idString = new String(req.getPart("id").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        int id = Integer.parseInt(idString);
+
+        String brand = new String(req.getPart("brand").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        String ref = new String(req.getPart("ref").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        String localDate = new String(req.getPart("purchaseDate").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        LocalDateTime purchaseDate = LocalDateTime.parse(localDate);
+
+        String priceString = new String(req.getPart("price").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        double price = Double.parseDouble(priceString);
+
+        System.out.println(brand);
+
+        String stockString = new String(req.getPart("stock").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+
+        int stock = Integer.parseInt(stockString);
+
+        Part image = req.getPart("image");
+        String imageName = null;
+        if (!image.getSubmittedFileName().isEmpty()){
+            imageName = image.getSubmittedFileName();
+            uploadImage(image);
+        }
+        System.out.println(imageName);
+        if(productService.updateProduct(id, brand, ref,imageName, purchaseDate, price, stock)){
             resp.setStatus(202);
             resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
         }else {
@@ -162,6 +184,9 @@ public class ProductServlet extends HttpServlet {
 
     }
 
+    protected void getFormData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
     protected void uploadImage(Part imagePart){
         String fileName = imagePart.getSubmittedFileName();
         //String fullPath = uploadPath + File.separator + fileName;

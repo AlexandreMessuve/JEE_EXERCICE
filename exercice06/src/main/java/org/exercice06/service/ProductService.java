@@ -35,7 +35,7 @@ public class ProductService extends ServiceHibernate{
 
     }
 
-    public boolean updateProduct(int id, String brand, String ref,LocalDateTime purchaseDate, double price, int stock) {
+    public boolean updateProduct(int id, String brand, String ref,String image,LocalDateTime purchaseDate, double price, int stock) {
         boolean result = false;
         Product product;
         session = sessionFactory.openSession();
@@ -46,6 +46,9 @@ public class ProductService extends ServiceHibernate{
             if (product != null) {
                 product.setBrand(brand);
                 product.setReference(ref);
+                if (image != null){
+                    product.setImage(image);
+                }
                 product.setPurchaseDate(purchaseDate);
                 product.setPrice(price);
                 product.setStock(stock);
