@@ -1,21 +1,43 @@
 package org.exercice06.controller;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import org.exercice06.entity.Product;
 import org.exercice06.service.ProductService;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "product", value = "/products/*")
+@MultipartConfig(fileSizeThreshold=1024*1024,
+        maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class ProductServlet extends HttpServlet {
     private final ProductService productService = new ProductService();
+    private static final String IMAGE_FOLDER = "/images";
+    private String uploadPath;
 
+    @Override
+    public void init() throws ServletException {
+        uploadPath = getServletContext().getRealPath(IMAGE_FOLDER);
+        File uploadDir = new File(uploadPath);
+        uploadDir.setWritable(true, false);
+        uploadDir.setExecutable(true, false);
+        uploadDir.setReadable(true, false);
+        if (!uploadDir.exists()){
+            if (!uploadDir.mkdirs()){
+                throw new ServletException("Unable to create directory " + uploadPath);
+            }
+        }
+    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
@@ -83,12 +105,20 @@ public class ProductServlet extends HttpServlet {
 
     }
     protected void addProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String brand = req.getParameter("brand");
-        String ref = req.getParameter("ref");
-        LocalDateTime purchaseDate = LocalDateTime.parse(req.getParameter("purchaseDate"));
-        double price = Double.parseDouble(req.getParameter("price"));
-        int stock = Integer.parseInt(req.getParameter("stock"));
-        if(productService.createProduct(brand, ref, purchaseDate, price, stock)){
+        String brand = new String(req.getPart("brand").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        String ref = new String(req.getPart("ref").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        String localDate = new String(req.getPart("purchaseDate").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        LocalDateTime purchaseDate = LocalDateTime.parse(localDate);
+        String priceString = new String(req.getPart("price").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        double price = Double.parseDouble(priceString);
+        System.out.println(brand);
+        String stockString = new String(req.getPart("stock").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        int stock = Integer.parseInt(stockString);
+        if (!uploadImage(req.getPart("image"))){
+            resp.sendRedirect(getServletContext().getContextPath()+"/product/addForm");
+        }
+        String image = req.getPart("image").getSubmittedFileName();
+        if(productService.createProduct(brand, ref,image, purchaseDate, price, stock)){
             resp.setStatus(201);
             resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
         }else {
@@ -133,5 +163,19 @@ public class ProductServlet extends HttpServlet {
             resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
         }
 
+    }
+
+    protected boolean uploadImage(Part imagePart){
+        boolean res = false;
+        String fileName = imagePart.getSubmittedFileName();
+        String fullPath = uploadPath + File.separator + fileName;
+        System.out.println(fullPath);
+        try {
+            imagePart.write(fullPath);
+            res = true;
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        return res;
     }
 }

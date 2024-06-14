@@ -22,7 +22,7 @@
     <h1><%=title%> a product
     </h1>
     <hr />
-    <form method="post" action="${pageContext.request.contextPath}/products/<%=mode%>">
+    <form method="post" action="${pageContext.request.contextPath}/products/<%=mode%>" enctype="multipart/form-data">
         <div class="my-3">
             <label class="form-label my-1" for="brand">
                 Brand
@@ -46,6 +46,10 @@
         <div class="my-3">
             <label class="form-label my-1" for="stock">Stock</label>
             <input class="form-control" <%if (isUpdate){%> value="<%=product.getStock()%>"<%}%> type="number" name="stock" id="stock" required>
+        </div>
+        <div class="my-3">
+            <label class="form-label my-1" for="image">Image</label>
+            <input class="form-control" type="file" accept="image/*" name="image" id="image" required>
         </div>
         <%if (isUpdate){%>
             <input hidden="hidden" name="id" id="id" value="<%=product.getId()%>" type="text">

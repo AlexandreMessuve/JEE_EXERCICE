@@ -12,11 +12,11 @@ public class ProductService extends ServiceHibernate{
         super();
     }
 
-    public boolean createProduct(String bread, String ref,LocalDateTime purchaseDate, double price, int stock) {
+    public boolean createProduct(String bread, String ref,String image, LocalDateTime purchaseDate, double price, int stock) {
         boolean result = false;
         session = sessionFactory.openSession();
         session.beginTransaction();
-        Product product = new Product(bread, ref,purchaseDate, price, stock);
+        Product product = new Product(bread, ref,image, purchaseDate, price, stock);
         productRepository = new ProductRepository(session);
         try {
             productRepository.create(product);

@@ -19,10 +19,11 @@
     <div class="container d-flex justify-content-center">
         <% if (product != null){%>
         <div class="card bg-dark " style="width: 50em;">
-            <div class="card-header text-center">
-
-            </div>
+            <%if (product.getImage() != null){%>
+            <img src="${pageContext.request.contextPath}/image/<%=product.getImage()%>" class="card-img-top" alt="<%=product.getReference()%>">
+            <%}%>
             <div class="card-body bg-dark text-light">
+
                 <div class="d-flex justify-content-between align-content-center my-1">
                     <h6 class="text-light">Created at : <%=product.getCreatedAt().format(DateTimeFormatter.ISO_DATE)%></h6>
                     <h1 class="card-title">Brand :  <%=product.getBrand() != null ? product.getBrand() : ""%></h1>

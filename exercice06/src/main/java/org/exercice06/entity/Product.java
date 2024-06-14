@@ -14,6 +14,7 @@ public class Product {
 
     private String reference;
 
+    private String image;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime purchaseDate;
 
@@ -29,9 +30,10 @@ public class Product {
 
 
     public Product() {}
-    public Product(String brand, String reference,LocalDateTime purchaseDate, Double price, int stock) {
+    public Product(String brand, String reference,String image, LocalDateTime purchaseDate, Double price, int stock) {
         this.brand = brand;
         this.reference = reference;
+        this.image = image;
         this.purchaseDate = purchaseDate;
         this.price = price;
         this.stock = stock;
@@ -58,6 +60,12 @@ public class Product {
         this.reference = reference;
     }
 
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
     public Double getPrice() {
         return price;
     }
