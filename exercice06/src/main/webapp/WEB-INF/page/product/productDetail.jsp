@@ -19,9 +19,7 @@
     <div class="container d-flex justify-content-center">
         <% if (product != null){%>
         <div class="card bg-dark " style="width: 50em;">
-            <%if (product.getImage() != null){%>
-            <img src="${pageContext.request.contextPath}/image/<%=product.getImage()%>" class="card-img-top" alt="<%=product.getReference()%>">
-            <%}%>
+
             <div class="card-body bg-dark text-light">
 
                 <div class="d-flex justify-content-between align-content-center my-1">
@@ -29,14 +27,20 @@
                     <h1 class="card-title">Brand :  <%=product.getBrand() != null ? product.getBrand() : ""%></h1>
                     <h6 class="text-light">Updated at: <%=product.getUpdatedAt().format(DateTimeFormatter.ISO_DATE)%></h6>
                 </div>
-                <div class="fs-3 my-3">
-                    <p class="card-text">Ref: <%=product.getReference() != null ? product.getReference() : ""%></p>
-                    <hr/>
-                    <p class="card-text">Price: <%=product.getPrice() != null ? product.getPrice() : ""%>$</p>
-                    <hr/>
-                    <p class="card-text">Stock: <%=product.getStock() != 0 ? product.getStock() : ""%></p>
-                    <hr/>
-                    <p class="card-text">Purchase date: <%=product.getPurchaseDate() != null ? product.getPurchaseDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : ""%></p>
+                <div class="d-flex fs-5 my-3">
+                    <div class="mx-2">
+                        <%if (product.getImage() != null){%>
+                        <img src="${pageContext.request.contextPath}/images/<%=product.getImage()%>" width="300" alt="<%=product.getReference()%>">
+                        <%}else{%>
+                        <img src="https://nayemdevs.com/wp-content/uploads/2020/03/default-product-image.png" width="300" alt="default product" />
+                        <%}%>
+                    </div>
+                    <div>
+                        <p class="card-text">Ref: <%=product.getReference() != null ? product.getReference() : ""%></p>
+                        <p class="card-text">Price: <%=product.getPrice() != null ? product.getPrice() : ""%>$</p>
+                        <p class="card-text">Stock: <%=product.getStock() != 0 ? product.getStock() : ""%></p>
+                        <p class="card-text">Purchase date: <%=product.getPurchaseDate() != null ? product.getPurchaseDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) : ""%></p>
+                    </div>
                 </div>
                 <hr/>
                 <div class="d-flex justify-content-between">

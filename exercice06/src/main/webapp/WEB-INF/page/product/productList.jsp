@@ -6,7 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="org.exercice06.entity.Product" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
 <jsp:useBean id="products" type="java.util.List<org.exercice06.entity.Product>" scope="request" />
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>

@@ -10,8 +10,7 @@ import jakarta.servlet.http.Part;
 import org.exercice06.entity.Product;
 import org.exercice06.service.ProductService;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
@@ -114,9 +113,7 @@ public class ProductServlet extends HttpServlet {
         System.out.println(brand);
         String stockString = new String(req.getPart("stock").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         int stock = Integer.parseInt(stockString);
-        if (!uploadImage(req.getPart("image"))){
-            resp.sendRedirect(getServletContext().getContextPath()+"/product/addForm");
-        }
+        uploadImage(req.getPart("image"));
         String image = req.getPart("image").getSubmittedFileName();
         if(productService.createProduct(brand, ref,image, purchaseDate, price, stock)){
             resp.setStatus(201);
@@ -165,17 +162,14 @@ public class ProductServlet extends HttpServlet {
 
     }
 
-    protected boolean uploadImage(Part imagePart){
-        boolean res = false;
+    protected void uploadImage(Part imagePart){
         String fileName = imagePart.getSubmittedFileName();
-        String fullPath = uploadPath + File.separator + fileName;
-        System.out.println(fullPath);
-        try {
-            imagePart.write(fullPath);
-            res = true;
-        }catch (IOException e){
-            System.out.println(e.getMessage());
+        //String fullPath = uploadPath + File.separator + fileName;
+        File file = new File(uploadPath, fileName);
+        try (InputStream inputStream = imagePart.getInputStream()){
+            Files.copy(inputStream, file.toPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return res;
     }
 }

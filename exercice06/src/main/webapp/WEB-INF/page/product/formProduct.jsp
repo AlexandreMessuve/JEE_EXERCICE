@@ -49,7 +49,7 @@
         </div>
         <div class="my-3">
             <label class="form-label my-1" for="image">Image</label>
-            <input class="form-control" type="file" accept="image/*" name="image" id="image" required>
+            <input class="form-control" type="file" accept="image/*" name="image" id="image" <%if (!isUpdate) {%> required<%}%>>
         </div>
         <%if (isUpdate){%>
             <input hidden="hidden" name="id" id="id" value="<%=product.getId()%>" type="text">
