@@ -12,20 +12,19 @@
     <title>Repository</title>
     <%@include file="/WEB-INF/bootstrap.html"%>
 </head>
-<body>
+<body class="vh-100 bg-dark text-light overflow-hidden">
 <%@include file="/WEB-INF/header.jsp"%>
 <main>
-
     <div class="container d-flex justify-content-center">
         <% if (product != null){%>
-        <div class="card bg-dark " style="width: 50em;">
+        <div class="card bg-light mt-5" style="width: 50em;">
 
-            <div class="card-body bg-dark text-light">
+            <div class="card-body text-dark">
 
                 <div class="d-flex justify-content-between align-content-center my-1">
-                    <h6 class="text-light">Created at : <%=product.getCreatedAt().format(DateTimeFormatter.ISO_DATE)%></h6>
+                    <p class="text-muted">Created at : <%=product.getCreatedAt().format(DateTimeFormatter.ISO_DATE)%></p>
                     <h1 class="card-title">Brand :  <%=product.getBrand() != null ? product.getBrand() : ""%></h1>
-                    <h6 class="text-light">Updated at: <%=product.getUpdatedAt().format(DateTimeFormatter.ISO_DATE)%></h6>
+                    <p class="text-muted">Updated at: <%=product.getUpdatedAt().format(DateTimeFormatter.ISO_DATE)%></p>
                 </div>
                 <div class="d-flex fs-5 my-3">
                     <div class="mx-2">

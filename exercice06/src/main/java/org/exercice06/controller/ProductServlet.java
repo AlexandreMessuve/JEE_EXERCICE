@@ -40,7 +40,7 @@ public class ProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        if (req.getSession().getAttribute("user") != null && req.getSession().getAttribute("isLoggedIn") != null) {
+        if (req.getSession().getAttribute("email") != null && req.getSession().getAttribute("isLoggedIn") != null) {
             String action = req.getPathInfo().substring(1);
             System.out.println(action);
             switch (action) {
@@ -77,6 +77,9 @@ public class ProductServlet extends HttpServlet {
         doGet(req, resp);
     }
 
+    /**
+     * Get product detail and redirect if product is null
+     */
     protected void detailProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         Product product = productService.getProduct(id);
@@ -88,14 +91,26 @@ public class ProductServlet extends HttpServlet {
             resp.sendRedirect(getServletContext().getContextPath()+"/product/list");
         }
     }
+
+    /**
+     * Get product list & redirect to the product list page
+     */
     protected void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Product> products = productService.getProducts();
         req.setAttribute("products", products);
         getServletContext().getRequestDispatcher("/WEB-INF/page/product/productList.jsp").forward(req, resp);
     }
+
+    /**
+     * Redirect to the product form
+     */
     protected void showForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         getServletContext().getRequestDispatcher("/WEB-INF/page/product/formProduct.jsp").forward(req, resp);
     }
+
+    /**
+     * Set attribute add for redirect to method showForm
+     */
     protected void addForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("mode", "add");
         Product product = new Product();
@@ -103,6 +118,10 @@ public class ProductServlet extends HttpServlet {
         showForm(req, resp);
 
     }
+
+    /**
+     * Add a new product after submit the form
+     */
     protected void addProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String brand = new String(req.getPart("brand").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         String ref = new String(req.getPart("ref").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
@@ -113,9 +132,13 @@ public class ProductServlet extends HttpServlet {
         System.out.println(brand);
         String stockString = new String(req.getPart("stock").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         int stock = Integer.parseInt(stockString);
-        uploadImage(req.getPart("image"));
-        String image = req.getPart("image").getSubmittedFileName();
-        if(productService.createProduct(brand, ref,image, purchaseDate, price, stock)){
+        Part image = req.getPart("image");
+        String imageName = null;
+        if (!image.getSubmittedFileName().isEmpty()){
+            imageName = image.getSubmittedFileName();
+            uploadImage(image);
+        }
+        if(productService.createProduct(brand, ref,imageName, purchaseDate, price, stock)){
             resp.setStatus(201);
             resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
         }else {
@@ -124,6 +147,10 @@ public class ProductServlet extends HttpServlet {
         }
 
     }
+
+    /**
+     * Set attribute update for redirect to method showForm
+     */
     protected void updateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         Product product = productService.getProduct(id);
@@ -135,6 +162,10 @@ public class ProductServlet extends HttpServlet {
         req.setAttribute("product", product);
         showForm(req, resp);
     }
+
+    /**
+     * Update a  product after submit the form
+     */
     protected void updateProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idString = new String(req.getPart("id").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         int id = Integer.parseInt(idString);
@@ -172,6 +203,10 @@ public class ProductServlet extends HttpServlet {
             resp.sendRedirect(getServletContext().getContextPath()+"/products/updateForm?id="+id);
         }
     }
+
+    /**
+     * Delete product if the product is not null else redirect to product list
+     */
     protected void deleteProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         if(productService.deleteProduct(id)){
@@ -184,9 +219,10 @@ public class ProductServlet extends HttpServlet {
 
     }
 
-    protected void getFormData(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-    }
+    /**
+     *
+     * Method for transfer a image to the directory of the server
+     */
     protected void uploadImage(Part imagePart){
         String fileName = imagePart.getSubmittedFileName();
         //String fullPath = uploadPath + File.separator + fileName;
@@ -196,5 +232,10 @@ public class ProductServlet extends HttpServlet {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

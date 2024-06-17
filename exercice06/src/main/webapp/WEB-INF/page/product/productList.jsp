@@ -13,18 +13,18 @@
     <title>Product list</title>
     <%@include file="/WEB-INF/bootstrap.html"%>
 </head>
-<body>
+<body class="vh-100 text-light bg-dark">
 <%@include file="/WEB-INF/header.jsp"%>
 <div class="container bg-dark text-light">
     <div class="d-flex justify-content-between my-2">
         <h1>Product list</h1>
         <div class="align-content-center">
-            <a href="${pageContext.request.contextPath}/products/addForm" class="btn btn-outline-primary">Ajouter un produit</a>
+            <a href="${pageContext.request.contextPath}/products/addForm" class="btn btn-outline-primary">Add a product</a>
         </div>
     </div>
 
     <hr  />
-    <table class="table table-dark table-bordered table-striped  my-3 text-center">
+    <table class="table table-light table-bordered table-striped  my-3 text-center">
         <thead>
         <tr>
             <th>#</th>
@@ -46,13 +46,13 @@
             <td><%=product.getPrice()%>$</td>
             <td class="d-flex justify-content-center">
                 <div class="mx-1">
-                    <a class="btn btn-outline-info" href="${pageContext.request.contextPath}/products/detail?id=<%=product.getId()%>">Detail</a>
+                    <a class="btn btn-info" href="${pageContext.request.contextPath}/products/detail?id=<%=product.getId()%>">Detail</a>
                 </div>
                 <div class="mx-1">
-                    <a class="btn btn-outline-secondary" href="${pageContext.request.contextPath}/products/updateForm?id=<%=product.getId()%>">Update</a>
+                    <a class="btn btn-primary" href="${pageContext.request.contextPath}/products/updateForm?id=<%=product.getId()%>">Update</a>
                 </div>
                 <div class="mx-1">
-                    <a onclick="return confirm('Are you sure ? ')" class="btn btn-outline-danger" href="${pageContext.request.contextPath}/products/delete?id=<%=product.getId()%>">Delete</a>
+                    <a onclick="return confirm('Are you sure ? ')" class="btn btn-danger" href="${pageContext.request.contextPath}/products/delete?id=<%=product.getId()%>">Delete</a>
                 </div>
             </td>
         </tr>

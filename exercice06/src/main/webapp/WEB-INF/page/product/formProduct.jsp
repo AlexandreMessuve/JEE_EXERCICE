@@ -17,47 +17,50 @@
     </title>
     <%@include file="/WEB-INF/bootstrap.html"%>
 </head>
-<body>
-<div class="container bg-dark text-light">
+<body class="vh-100 bg-dark text-light overflow-hidden">
+<%@include file="/WEB-INF/header.jsp"%>
+<div class="container bg-dark text-light mt-2">
     <h1><%=title%> a product
     </h1>
     <hr />
     <form method="post" action="${pageContext.request.contextPath}/products/<%=mode%>" enctype="multipart/form-data">
         <div class="my-3">
             <label class="form-label my-1" for="brand">
-                Brand
+                Brand*
             </label>
             <input <% if (isUpdate){%> value="<%=product.getBrand()%>"<%}%> required class="form-control" name="brand" id="brand" type="text" placeholder="Apple" />
         </div>
         <div class="my-3">
             <label class="form-label my-1" for="ref">
-                Reference
+                Reference*
             </label>
             <input <% if (isUpdate){%> value="<%=product.getReference()%>"<%}%> required class="form-control" name="ref" id="ref" type="text" placeholder="Iphone 15 Pro"/>
         </div>
         <div class="my-3">
-            <label class="form-label my-1" for="purchaseDate">Purchase date</label>
+            <label class="form-label my-1" for="purchaseDate">Purchase date*</label>
             <input class="form-control" <%if (isUpdate){%> value="<%=product.getPurchaseDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)%>"<%}%> type="datetime-local" name="purchaseDate" id="purchaseDate" required>
         </div>
         <div class="my-3">
-            <label class="form-label my-1" for="price">Price</label>
-            <input class="form-control" <%if (isUpdate){%> value="<%=product.getPrice()%>"<%}%>  step="0.01" type="number" name="price" id="price" required>
+            <label class="form-label my-1" for="price">Price*</label>
+            <input class="form-control" <%if (isUpdate){%> value="<%=product.getPrice()%>"<%}%> min="0.5"  step="0.01" type="number" name="price" id="price" required>
         </div>
         <div class="my-3">
-            <label class="form-label my-1" for="stock">Stock</label>
-            <input class="form-control" <%if (isUpdate){%> value="<%=product.getStock()%>"<%}%> type="number" name="stock" id="stock" required>
+            <label class="form-label my-1" for="stock">Stock*</label>
+            <input class="form-control" <%if (isUpdate){%> value="<%=product.getStock()%>"<%}%> step="1" min="1" type="number" name="stock" id="stock" required>
         </div>
         <div class="my-3">
             <label class="form-label my-1" for="image">Image</label>
-            <input class="form-control" type="file" accept="image/*" name="image" id="image" <%if (!isUpdate) {%> required<%}%>>
+            <input class="form-control" type="file" accept="image/*" name="image" id="image" >
         </div>
         <%if (isUpdate){%>
             <input hidden="hidden" name="id" id="id" value="<%=product.getId()%>" type="text">
         <%}%>
+        <p class="fs-6">* is required fields</p>
         <div class="d-flex justify-content-center my-3">
             <button onclick="return confirm('Are you sure ?')" class="btn btn-primary mx-1"><%=isUpdate ? "Update" : "Add"%></button>
             <a onclick="return confirm('Are you sure ?')" class="btn btn-danger mx-1" href="${pageContext.request.contextPath}/products/list">Cancel</a>
         </div>
+
 
 
     </form>
