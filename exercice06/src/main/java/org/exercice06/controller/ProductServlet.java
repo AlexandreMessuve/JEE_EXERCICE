@@ -28,12 +28,12 @@ public class ProductServlet extends HttpServlet {
     public void init() throws ServletException {
         uploadPath = getServletContext().getRealPath(IMAGE_FOLDER);
         File uploadDir = new File(uploadPath);
-        uploadDir.setWritable(true, false);
-        uploadDir.setExecutable(true, false);
-        uploadDir.setReadable(true, false);
-        if (!uploadDir.exists()){
-            if (!uploadDir.mkdirs()){
-                throw new ServletException("Unable to create directory " + uploadPath);
+        boolean condition = uploadDir.setWritable(true, false) && uploadDir.setExecutable(true, false) && uploadDir.setReadable(true, false);
+        if (condition) {
+            if (!uploadDir.exists()){
+                if (!uploadDir.mkdirs()){
+                    throw new ServletException("Unable to create directory " + uploadPath);
+                }
             }
         }
     }
@@ -123,22 +123,7 @@ public class ProductServlet extends HttpServlet {
      * Add a new product after submit the form
      */
     protected void addProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String brand = new String(req.getPart("brand").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        String ref = new String(req.getPart("ref").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        String localDate = new String(req.getPart("purchaseDate").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        LocalDateTime purchaseDate = LocalDateTime.parse(localDate);
-        String priceString = new String(req.getPart("price").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        double price = Double.parseDouble(priceString);
-        System.out.println(brand);
-        String stockString = new String(req.getPart("stock").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
-        int stock = Integer.parseInt(stockString);
-        Part image = req.getPart("image");
-        String imageName = null;
-        if (!image.getSubmittedFileName().isEmpty()){
-            imageName = image.getSubmittedFileName();
-            uploadImage(image);
-        }
-        if(productService.createProduct(brand, ref,imageName, purchaseDate, price, stock)){
+        if(productAddOrUpdate(req, "add")){
             resp.setStatus(201);
             resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
         }else {
@@ -167,9 +152,18 @@ public class ProductServlet extends HttpServlet {
      * Update a  product after submit the form
      */
     protected void updateProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String idString = new String(req.getPart("id").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        String idString = new String(req.getPart("id").getInputStream().readAllBytes());
         int id = Integer.parseInt(idString);
+        if(productAddOrUpdate(req, "update")){
+            resp.setStatus(202);
+            resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
+        }else {
+            resp.setStatus(400);
+            resp.sendRedirect(getServletContext().getContextPath()+"/products/updateForm?id="+id);
+        }
+    }
 
+    protected boolean productAddOrUpdate(HttpServletRequest req, String type) throws ServletException, IOException {
         String brand = new String(req.getPart("brand").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
         String ref = new String(req.getPart("ref").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
@@ -195,15 +189,15 @@ public class ProductServlet extends HttpServlet {
             uploadImage(image);
         }
         System.out.println(imageName);
-        if(productService.updateProduct(id, brand, ref,imageName, purchaseDate, price, stock)){
-            resp.setStatus(202);
-            resp.sendRedirect(getServletContext().getContextPath()+"/products/list");
-        }else {
-            resp.setStatus(400);
-            resp.sendRedirect(getServletContext().getContextPath()+"/products/updateForm?id="+id);
+        if (type.equals("add")) {
+            return productService.createProduct(brand, ref, imageName, purchaseDate, price, stock);
+        }else{
+            String idString = new String(req.getPart("id").getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            int id = Integer.parseInt(idString);
+            return productService.updateProduct(id, brand, ref, imageName, purchaseDate, price, stock);
         }
-    }
 
+    }
     /**
      * Delete product if the product is not null else redirect to product list
      */

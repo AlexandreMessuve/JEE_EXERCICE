@@ -26,8 +26,10 @@ Un produit sera défini par (au moins) :
 
 
 ## Résultat
+Formulaire d'inscription
+![Formulaire d'inscription](img/screenshotRegister.png 'register')
 Formulaire de connexion
-![](img/screenshotLogin.png 'login')
+![Formulaire de connexion](img/screenshotLogin.png 'login')
 Formulaire d'ajout de produit
 ![Formulaire d'ajout de produit](img/screenshotAddProduct.png 'add a product')
 Liste des produits
@@ -36,5 +38,11 @@ Formulaire de mise à jour d'un produit
 ![Formulaire de mise a jour d'un produit](img/screenshotUpdateProduct.png 'update product')
 Detail d'un produit
 ![Detail d'un produit](img/screenshotDetailProduct.png 'product detail')
-Message d'alert en cas de suppression d'un produit
-![Suppression produit](img/screenshotConfirmDelete.png 'confirm delete')
+Message d'alerte en cas de suppression d'un produit
+![Suppression produit](img/screenshotProductDeleteAlert.png 'confirm delete')
+Profile utilisateur
+![Profile utilisateur](img/screenshotUserProfile.png 'user profile')
+Mise à jour d'un utilisateur
+![Mise à jour d'un utilisateur](img/screenshotUserUpdate.png 'register')
+Message d'alerte en cas de suppression d'un produit
+![Message d'alerte en cas de suppression d'un produit](img/screenshotUserDeleteAlert.png 'register')
