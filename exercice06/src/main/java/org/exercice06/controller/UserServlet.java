@@ -12,10 +12,11 @@ import java.io.IOException;
 
 @WebServlet(name = "user", value = "/user/*")
 public class UserServlet extends HttpServlet {
-    private final UserService userService = new UserService();
+    private UserService userService;
 
     @Override
     public void init(){
+        userService = new UserService();
     }
 
     @Override
@@ -68,9 +69,6 @@ public class UserServlet extends HttpServlet {
 
     protected void profile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("mode", "profile");
-        if (req.getSession().getAttribute("email") == null && req.getSession().getAttribute("isLoggedIn") == null) {
-            resp.sendRedirect(getServletContext().getContextPath() + "/user/loginForm");
-        }
         String email = (String) req.getSession().getAttribute("email");
         User user = userService.getUser(email);
         req.setAttribute("user", user);
